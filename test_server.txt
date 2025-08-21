@@ -1,0 +1,3 @@
+free -m
+free -m
+free -m
