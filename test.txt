@@ -1,0 +1,72 @@
+# Log Checker
+
+A powerful and efficient Python-based log monitoring and analysis tool. It continuously watches log files, scans for user-defined patterns (like errors, warnings, or specific events), and sends real-time alerts via email when those patterns are detected.
+
+![Python](https://img.shields.io/badge/Python-3.6%2B-blue?logo=python)
+![License](https://img.shields.io/badge/License-MIT-green)
+
+## Features
+
+*   **Real-time Monitoring:** Actively tails log files, similar to the `tail -f` command, for live updates.
+*   **Pattern Matching:** Scans log entries for specific regular expressions or keywords (e.g., `ERROR`, `HTTP 5\d\d`, custom patterns).
+*   **Email Alerts:** Sends immediate email notifications when a critical event is found.
+*   **Configurable:** Easy-to-edit configuration file (`config.ini`) to set up log paths, search patterns, and alert settings without changing code.
+*   **Daemon Mode:** Can be run in the background as a persistent service.
+
+## Prerequisites
+
+Before you begin, ensure you have met the following requirements:
+
+*   You have installed **Python 3.6** or higher.
+*   You have a mail server (like Gmail SMTP) credentials for email alerts.
+
+## Installation
+
+To install Log Checker, follow these steps:
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/shawonsom/Log_checker.git
+    cd Log_checker
+    ```
+
+2.  **(Optional but Recommended) Create a virtual environment:**
+    ```bash
+    python3 -m venv venv
+    source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+    ```
+
+3.  **Install the required dependencies:**
+    The project uses the `pygtail` library to reliably read new lines from log files, even after log rotation.
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+## Configuration
+
+The tool is configured using the `config.ini` file. You **must** edit this file before your first run.
+
+1.  Open `config.ini` in a text editor.
+2.  **Email Settings (`[email]` section):**
+    *   `from_addr`: Your email address (e.g., `your.email@gmail.com`).
+    *   `to_addr`: The recipient's email address where alerts should be sent.
+    *   `password`: **App Password** for your email account. For Gmail, you must generate this in your account security settings; your regular password will not work.
+    *   `smtp_server`: The SMTP server address (e.g., `smtp.gmail.com`).
+    *   `smtp_port`: The SMTP server port (e.g., `587` for TLS).
+
+3.  **Log File & Patterns (`[log]` section):**
+    *   `log_file`: The absolute path to the log file you want to monitor (e.g., `/var/log/nginx/error.log` or `C:\App\logs\app.log`).
+    *   `search_pattern`: The regular expression pattern to search for. The default is `(ERROR|Error|error)`. You can customize this for any pattern (e.g., `HTTP/1.1" 5\d\d` for server errors).
+
+**Example `config.ini`:**
+```ini
+[email]
+from_addr = your.email@gmail.com
+to_addr = admin@yourcompany.com
+password = your_16_digit_app_password
+smtp_server = smtp.gmail.com
+smtp_port = 587
+
+[log]
+log_file = /var/log/my_application/application.log
+search_pattern = (CRITICAL|ERROR|TimeoutException)
